@@ -1,0 +1,3 @@
+---
+dependencies:
+- { role: dork.supervisord, service_name: mariadb, service_command: mysqld_safe --datadir='/var/lib/mysql' }

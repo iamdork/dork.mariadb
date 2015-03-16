@@ -1,0 +1,17 @@
+- name: install mariadb
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - mariadb
+  - mariadb-server
+  register: install
+
+- name: database setup
+  shell: mysql_install_db
+  when: install.changed
+
+- name: change owner of /var/lib/mysql
+  shell: chown -R mysql /var/lib/mysql
+  when: install.changed
+
