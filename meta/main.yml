@@ -1,8 +1,1 @@
----
-dependencies:
-- {
-    role: dork.supervisord,
-    service_name: mariadb,
-    service_pid: /var/run/mariadb/mariadb.pid,
-    service_command: /usr/bin/mysqld_safe --datadir='/var/lib/mysql'
-  }
+dependencies: []

@@ -15,3 +15,9 @@
   shell: chown -R mysql /var/lib/mysql
   when: install.changed
 
+- name: install supervisor configuration
+  copy:
+    src: mariadb.ini
+    dest: /etc/supervisord.d/mariadb.ini
+  notify: reload supervisor
+
