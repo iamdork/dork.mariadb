@@ -35,5 +35,5 @@
   supervisorctl:
     name: mariadb
     state: restarted
-  when: install.changed
+  when: install.changed or supervisor.changed
 
