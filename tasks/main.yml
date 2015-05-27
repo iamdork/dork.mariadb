@@ -7,6 +7,22 @@
   - mariadb-server
   register: install
 
+- name: install supervisor configuration
+  copy:
+    src: mariadb.ini
+    dest: /etc/supervisord.d/mariadb.ini
+  register: supervisor
+
+- name: reload supervisor
+  supervisorctl:
+    name: mariadb
+    state: restarted
+  when: supervisor.changed
+
+- name: database setup
+  shell: mysql_install_db
+  when: install.changed
+
 - name: database setup
   shell: mysql_install_db
   when: install.changed
@@ -15,20 +31,9 @@
   shell: chown -R mysql /var/lib/mysql
   when: install.changed
 
-- name: install supervisor configuration
-  copy:
-    src: mariadb.ini
-    dest: /etc/supervisord.d/mariadb.ini
-  register: supervisor
-
-- name: start mariadb
-  supervisorctl:
-    name: mariadb
-    state: started
-
 - name: reload supervisor
   supervisorctl:
     name: mariadb
     state: restarted
-  when: install.changed or supervisor.changed
+  when: install.changed
 
