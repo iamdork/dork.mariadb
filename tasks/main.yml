@@ -13,25 +13,22 @@
     dest: /etc/supervisord.d/mariadb.ini
   register: supervisor
 
-- name: reload supervisor
+- name: start mariadb service
   supervisorctl:
     name: mariadb
-    state: restarted
-  when: supervisor.changed
-
-- name: database setup
-  shell: mysql_install_db
-  when: install.changed
+    state: present
 
 - name: database setup
   shell: mysql_install_db
   when: install.changed
 
 - name: change owner of /var/lib/mysql
-  shell: chown -R mysql /var/lib/mysql
-  when: install.changed
+  file:
+    path: /var/lib/mysql
+    owner: mysql
+    recurse: yes
 
-- name: reload supervisor
+- name: restart mariadb
   supervisorctl:
     name: mariadb
     state: restarted
